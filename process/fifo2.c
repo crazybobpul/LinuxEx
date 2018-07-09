@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	}
 	
 	printf("Process %d opening FIFO\n",getpid()); 
-	res=open(FIFO_NAME, open_mode);//위에서 입력된 오픈모드로 파일 오픈, 새 fd 넣어줌. 자식 생김.
+	res=open(FIFO_NAME, open_mode);//위에서 입력된 오픈모드로 파일 오픈, 새 fd 넣어줌.
 	
 	printf("Process %d result %d\n", getpid(),res);//
 	sleep(5);
