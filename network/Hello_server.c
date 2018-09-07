@@ -7,6 +7,8 @@
 #include <sys/socket.h>
 #include "test1.h"
 
+#define TRUE 1
+#define FALSE 0
 
 // ./hello_server [PORT]
 void error_handling(char *message);
@@ -16,9 +18,12 @@ int main(int argc, char *argv[])
 	int serv_sock;
 	int clnt_sock;
 
+	int option;
+
 	struct sockaddr_in serv_addr;
 	struct sockaddr_in clnt_addr;
 	socklen_t clnt_addr_size;
+	socklen_t optlen;
 
 	char message[]="Hello World!";
 	char *ipaddr;
@@ -45,7 +50,16 @@ int main(int argc, char *argv[])
 	serv_addr.sin_family=AF_INET;
 	serv_addr.sin_addr.s_addr=htonl(INADDR_ANY);	// IP설정
 	serv_addr.sin_port=htons(atoi(argv[1]));	// PORT설정
-	
+
+
+	// port 할당이 가능하도록 하여 bind error 가 생성되지 않음	
+	optlen = sizeof(option);
+	option = TRUE;
+	setsockopt(serv_sock, SOL_SOCKET, SO_REUSEADDR, &option, optlen);
+
+
+
+
 	// 3. 서버의 주소값을 bind한다.
 	if(bind(serv_sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr))==-1)
 		error_handling("bind() error");
